@@ -17,9 +17,42 @@
     color: whitesmoke;
     border-radius: 20px;
     width: 450px;
+    height: 100%;
 }
 .table-container{
     width: 100%;
+}
+.user-table{
+    th:first-child{
+        border-top-left-radius: 10px;
+    }
+    th:last-child{
+        border-top-right-radius: 10px;
+    }
+    th{
+        background-color: var(--primary-color);
+        color: white;
+        vertical-align: middle;
+    } 
+    td{
+        vertical-align: middle;
+        text-align: center;
+    }
+    tfoot td{
+        background-color: var(--primary-color);
+        color: white;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        text-align: right;
+        font-style: italic;
+
+    }
+}
+.user-image{
+    width: 60px;
+    height: 60px;
+    object-fit: conver;
+    border-radius: 50%;
 }
 
 @media screen and (width < 768px){
