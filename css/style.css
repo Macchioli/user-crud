@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+:root{
+    --primary-color: #2b285b;
+    --secondary-color: #5ebdb3;
+}
+
+.main-container{
+    display:flex;
+}
+
+.form-container{
+    background-color: var(--primary-color) ;
+    color: whitesmoke;
+    border-radius: 20px;
+    width: 450px;
+}
+.table-container{
+    width: 100%;
+}
+
+@media screen and (width < 768px){
+    .main-container{
+        flex-direction: column;
+        align-items: center;
+    }
+    .form-container{
+        width: 90%;
+    }
+}
