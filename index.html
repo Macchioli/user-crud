@@ -23,11 +23,11 @@
 
 </head>
 <body class="bg-dark">
-    <h1 class="text-white">CRUD de Usuarios</h1>
+    <h1 class="text-white p-3 m-3">CRUD de Usuarios</h1>
     <main class="main-container">
         <div class="form-container p-4 m-4">
             <h2>Registro</h2>
-            <form>
+            <form id="user-form">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Nombre completo</label>
                     <input type="text" class="form-control" name="user-name" id="fullName">
@@ -37,16 +37,16 @@
                   <input type="email" class="form-control" name="user-email" id="email">
                 </div>
                 <div class="mb-3">
-                  <label for="tel" class="form-label">Whatsapp</label>
-                  <input type="tel" class="form-control" name="user-tel" id="tel">
+                  <label for="phone" class="form-label">Whatsapp</label>
+                  <input type="tel" class="form-control" name="user-tel" id="phone">
                 </div>
                 <div class="mb-3">
-                    <label for="tel" class="form-label">Fecha de nacimiento</label>
-                    <input type="date" class="form-control" name="user-date" id="tel">
+                    <label for="bornDate" class="form-label">Fecha de nacimiento</label>
+                    <input type="date" class="form-control" name="user-date" id="bornDate">
                 </div>
                 <div class="mb-3">
-                    <label for="img" class="form-label">Imágen de perfil (URL)</label>
-                    <input type="url" class="form-control" name="user-img" id="img">
+                    <label for="urlImg" class="form-label">Imágen de perfil (URL)</label>
+                    <input type="url" class="form-control" name="user-img" id="urlImg">
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Registrar</button>

@@ -29,10 +29,14 @@
     th:last-child{
         border-top-right-radius: 10px;
     }
+    td:nth-child(n+2):nth-child(-n+3){
+        text-align: left;
+    }
     th{
         background-color: var(--primary-color);
         color: white;
         vertical-align: middle;
+        text-align: center;
     } 
     td{
         vertical-align: middle;

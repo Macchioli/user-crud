@@ -1,9 +1,15 @@
 baseURL = "https://6622ed703e17a3ac846e40e5.mockapi.io/api"
 
 let users;
+let isEditing = false;
 const tableBodyHTML = document.getElementById("table-body")
+const userFormHTML = document.getElementById("user-form"); 
 
-axios.get(`${baseURL}/contact-list`)
+/*===== OBTENER USUARIOS ======*/
+getUsers();
+
+function getUsers(){
+    axios.get(`${baseURL}/contact-list`)
     .then(respuesta =>{
         users = respuesta.data;
         renderUsers(users)
@@ -16,6 +22,64 @@ axios.get(`${baseURL}/contact-list`)
             text: "No se pudo realizar la carga de usuarios 😢"
           });
     })
+}
+/*===== END OBTENER USUARIOS ======*/
+
+/*===== ALTA USUARIO ======*/
+
+userFormHTML.addEventListener("submit", (evento) =>{ 
+    evento.preventDefault()
+    
+    const el = evento.target.elements 
+    
+    const nuevoUsuario ={
+        fullName: el.fullName.value,
+        email: el.email.value,
+        phone: +el.phone.value, 
+        bornDate: new Date(el.bornDate.value).getTime(), 
+        urlImg: el.urlImg.value
+    }
+
+    if(isEditing){
+        //Buscar un usuario y reemplazarlo
+        // const userIndex = users.findIndex(user =>{
+        //     return user.id === isEditing;
+        // })
+        // users[userIndex] = nuevoUsuario
+
+    }else{
+        //Agregar un usuario ya que es un user nuevo
+        axios.post(`${baseURL}/contact-list`, nuevoUsuario)
+            .then(()=>{
+                getUsers();
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Genial!",
+                    text: "El usuario fue registrado correctamente 🎉"
+                });
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+    }
+
+    
+
+    //Formateamos el formulario
+    isEditing = null;
+    // formContainerHTML.classList.remove('form-edit')
+
+    // btnSubmitHTML.classList.add('btn-primary')
+    // btnSubmitHTML.classList.remove('btn-success')
+    // btnSubmitHTML.innerText = "Agregar";
+
+    /* Formateo Form */
+    userFormHTML.reset();
+    el.fullName.focus();
+})
+
+/*===== END ALTA USUARIO ======*/
+
 
 /*===== RENDER USERS ======*/
 function renderUsers(arrayUsers){
@@ -52,3 +116,9 @@ function transformTimestampToDate(dateTimeStamp){
     return date
 }
 /*===== END TRANSFORMAR TIMESTAMP A DATE ======*/
+
+/*===== COMPLETAR FORMULARIO DE USUARIO ======*/
+
+
+
+/*===== END COMPLETAR FORMULARIO DE USUARIO ======*/
