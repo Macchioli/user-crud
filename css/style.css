@@ -19,6 +19,9 @@
     width: 450px;
     height: 100%;
 }
+.form-edit{
+    background-color: var(--secondary-color);
+}
 .table-container{
     width: 100%;
 }

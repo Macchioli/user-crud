@@ -1,9 +1,12 @@
 baseURL = "https://6622ed703e17a3ac846e40e5.mockapi.io/api"
 
 let users;
-let isEditing = false;
-const tableBodyHTML = document.getElementById("table-body")
-const userFormHTML = document.getElementById("user-form"); 
+let isEditing = null;
+const tableBodyHTML = document.getElementById("table-body");
+const userFormHTML = document.getElementById("user-form");
+const formContainerHTML = document.getElementById("form-container");
+const btnSubmitHTML = document.getElementById("btn-submit");
+const formTitleHTML = document.getElementById("form-title");
 
 /*===== OBTENER USUARIOS ======*/
 getUsers();
@@ -32,7 +35,7 @@ userFormHTML.addEventListener("submit", (evento) =>{
     
     const el = evento.target.elements 
     
-    const nuevoUsuario ={
+    const usuarioEnForm ={
         fullName: el.fullName.value,
         email: el.email.value,
         phone: +el.phone.value, 
@@ -41,15 +44,23 @@ userFormHTML.addEventListener("submit", (evento) =>{
     }
 
     if(isEditing){
+        console.log("Entro editor y el id es" + isEditing)
         //Buscar un usuario y reemplazarlo
-        // const userIndex = users.findIndex(user =>{
-        //     return user.id === isEditing;
-        // })
-        // users[userIndex] = nuevoUsuario
-
+        axios.put(`${baseURL}/contact-list/${isEditing}`, usuarioEnForm )
+            .then(()=>{
+                getUsers();
+                Swal.fire({
+                    icon: "success",
+                    title: "¡Genial!",
+                    text: "El usuario fue editado correctamente 🎉"
+                });
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
     }else{
         //Agregar un usuario ya que es un user nuevo
-        axios.post(`${baseURL}/contact-list`, nuevoUsuario)
+        axios.post(`${baseURL}/contact-list`, usuarioEnForm)
             .then(()=>{
                 getUsers();
                 Swal.fire({
@@ -67,11 +78,11 @@ userFormHTML.addEventListener("submit", (evento) =>{
 
     //Formateamos el formulario
     isEditing = null;
-    // formContainerHTML.classList.remove('form-edit')
-
-    // btnSubmitHTML.classList.add('btn-primary')
-    // btnSubmitHTML.classList.remove('btn-success')
-    // btnSubmitHTML.innerText = "Agregar";
+    formContainerHTML.classList.remove('form-edit')
+    btnSubmitHTML.classList.add('btn-primary')
+    btnSubmitHTML.classList.remove('btn-success')
+    formTitleHTML.innerHTML = "Registro";
+    btnSubmitHTML.innerText = "Registrar";
 
     /* Formateo Form */
     userFormHTML.reset();
@@ -100,6 +111,7 @@ function renderUsers(arrayUsers){
                                         </td>
                                     </tr>`
     })
+    updateEditButtons();
 }
 /*===== END RENDER USERS ======*/
 
@@ -117,8 +129,55 @@ function transformTimestampToDate(dateTimeStamp){
 }
 /*===== END TRANSFORMAR TIMESTAMP A DATE ======*/
 
-/*===== COMPLETAR FORMULARIO DE USUARIO ======*/
+/* ===== UPDATE BOTONES EDIT ===== */
+function updateEditButtons(){
+    userButtonsEdit = document.querySelectorAll('button[data-edit]') 
+    
+    userButtonsEdit.forEach((btn) =>{ 
+         
+        btn.addEventListener('click', (evt) =>{
+        
+            const id = evt.currentTarget.dataset.edit
+
+            console.log(id) //Imprimo para corroborar
+
+            completeUserForm(id);
+        }) 
+    }) 
+}
+/* ===== END UPDATE BOTONES EDIT ===== */
+/*===== EDITAR USUARIO POR FORMULARIO ======*/
+function completeUserForm(idUser){
+    console.log(`Complete Form ${idUser}`)
+    
+    isEditing = idUser; 
+    const user = users.find((usr) =>{
+        if(usr.id === idUser){
+            return true
+        }
+        return false
+    })
+    
+    if(!user){
+        Swal.fire("Error", "No se encontro usuario")
+        return
+    }
+    //Rellenar el formulario con los datos de este usuario
+    const el = userFormHTML.elements;
+
+    el.fullName.value = user.fullName;
+    el.email.value = user.email;
+    el.phone.value = user.phone;
+    el.bornDate.valueAsNumber = user.bornDate;
+    el.urlImg.value = user.urlImg;
+    
 
 
+    formContainerHTML.classList.add('form-edit');
+    btnSubmitHTML.classList.remove('btn-primary');
+    btnSubmitHTML.classList.add('btn-success');
+    formTitleHTML.innerHTML = `Editar usuario: <h5 style="color:grey;">${user.fullName}</h5>`
+    btnSubmitHTML.innerText = "Editar";
 
-/*===== END COMPLETAR FORMULARIO DE USUARIO ======*/
+}
+/*===== END EDITAR USUARIO POR FORMULARIO ======*/
