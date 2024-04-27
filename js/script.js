@@ -18,7 +18,7 @@ function getUsers(){
         renderUsers(users)
 
     })
-    .catch(error =>{
+    .catch(() =>{
         Swal.fire({
             icon: "error",
             title: "¡Algo salió mal!",
@@ -28,7 +28,7 @@ function getUsers(){
 }
 /*===== END OBTENER USUARIOS ======*/
 
-/*===== ALTA USUARIO ======*/
+/*===== ALTA / EDICIÓN USUARIO ======*/
 
 userFormHTML.addEventListener("submit", (evento) =>{ 
     evento.preventDefault()
@@ -44,7 +44,7 @@ userFormHTML.addEventListener("submit", (evento) =>{
     }
 
     if(isEditing){
-        console.log("Entro editor y el id es" + isEditing)
+       
         //Buscar un usuario y reemplazarlo
         axios.put(`${baseURL}/contact-list/${isEditing}`, usuarioEnForm )
             .then(()=>{
@@ -55,8 +55,12 @@ userFormHTML.addEventListener("submit", (evento) =>{
                     text: "El usuario fue editado correctamente 🎉"
                 });
             })
-            .catch((error)=>{
-                console.log(error)
+            .catch(()=>{
+                Swal.fire({
+                    icon: "error",
+                    title: "Algo salió mal! 😭",
+                    text: "No pudimos registrar los cambios"
+                });
             })
     }else{
         //Agregar un usuario ya que es un user nuevo
@@ -69,14 +73,18 @@ userFormHTML.addEventListener("submit", (evento) =>{
                     text: "El usuario fue registrado correctamente 🎉"
                 });
             })
-            .catch((error)=>{
-                console.log(error)
+            .catch(()=>{
+                Swal.fire({
+                    icon: "error",
+                    title: "Algo salió mal! 😭",
+                    text: "No pudimos registrar los cambios"
+                });
             })
     }
 
     
 
-    //Formateamos el formulario
+    //Reset el formulario
     isEditing = null;
     formContainerHTML.classList.remove('form-edit')
     btnSubmitHTML.classList.add('btn-primary')
@@ -84,12 +92,11 @@ userFormHTML.addEventListener("submit", (evento) =>{
     formTitleHTML.innerHTML = "Registro";
     btnSubmitHTML.innerText = "Registrar";
 
-    /* Formateo Form */
     userFormHTML.reset();
     el.fullName.focus();
 })
 
-/*===== END ALTA USUARIO ======*/
+/*===== END ALTA / EDICIÓN USUARIO ======*/
 
 
 /*===== RENDER USERS ======*/
@@ -112,6 +119,7 @@ function renderUsers(arrayUsers){
                                     </tr>`
     })
     updateEditButtons();
+    updateDeleteButtons();
 }
 /*===== END RENDER USERS ======*/
 
@@ -146,10 +154,10 @@ function updateEditButtons(){
     }) 
 }
 /* ===== END UPDATE BOTONES EDIT ===== */
+
 /*===== EDITAR USUARIO POR FORMULARIO ======*/
 function completeUserForm(idUser){
-    console.log(`Complete Form ${idUser}`)
-    
+
     isEditing = idUser; 
     const user = users.find((usr) =>{
         if(usr.id === idUser){
@@ -181,3 +189,37 @@ function completeUserForm(idUser){
 
 }
 /*===== END EDITAR USUARIO POR FORMULARIO ======*/
+
+/* ===== ELIMINAR USUARIO */
+
+function updateDeleteButtons(){
+    userButtonsDelete = document.querySelectorAll('button[data-delete]') 
+    
+    userButtonsDelete.forEach((btn) =>{ 
+         
+        btn.addEventListener('click', (evt) =>{
+        
+            const id = evt.currentTarget.dataset.delete
+
+            axios.delete(`${baseURL}/contact-list/${id}`) 
+                .then( () => {
+                    getUsers();
+                    Swal.fire({
+                        icon: "success",
+                        title: "¡Genial!",
+                        text: "El usuario fue eliminado correctamente ♻"
+                    });
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Algo salió mal!",
+                        text: "No se pudo eliminar el usuario 😪"
+                    });
+                })
+                }) 
+    }) 
+}
+
+/* ===== END ELIMINAR USUARIO */
+
