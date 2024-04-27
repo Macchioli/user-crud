@@ -67,11 +67,21 @@ userFormHTML.addEventListener("submit", (evento) =>{
         axios.post(`${baseURL}/contact-list`, usuarioEnForm)
             .then(()=>{
                 getUsers();
-                Swal.fire({
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
                     icon: "success",
-                    title: "¡Genial!",
-                    text: "El usuario fue registrado correctamente 🎉"
-                });
+                    title: "Usuario registrado con éxito"
+                  });
             })
             .catch(()=>{
                 Swal.fire({
@@ -201,23 +211,39 @@ function updateDeleteButtons(){
         
             const id = evt.currentTarget.dataset.delete
 
-            axios.delete(`${baseURL}/contact-list/${id}`) 
-                .then( () => {
-                    getUsers();
-                    Swal.fire({
-                        icon: "success",
-                        title: "¡Genial!",
-                        text: "El usuario fue eliminado correctamente ♻"
-                    });
-                })
-                .catch(() => {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Algo salió mal!",
-                        text: "No se pudo eliminar el usuario 😪"
-                    });
-                })
-                }) 
+
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Estás por eliminar un usuario",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#2b285b",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirmar",
+                cancelButtonText: "Cancelar"
+              }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.delete(`${baseURL}/contact-list/${id}`) 
+                        .then( () => {
+                            getUsers();
+                            Swal.fire({
+                                icon: "success",
+                                title: "¡Genial!",
+                                text: "El usuario fue eliminado correctamente ♻"
+                            });
+                        })
+                        .catch(() => {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Algo salió mal!",
+                                text: "No se pudo eliminar el usuario 😪"
+                            });
+                        })
+                    }
+              });
+
+            
+        }) 
     }) 
 }
 

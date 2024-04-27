@@ -30,23 +30,23 @@
             <form id="user-form">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Nombre completo</label>
-                    <input type="text" class="form-control" name="user-name" id="fullName">
+                    <input type="text" class="form-control" name="user-name" id="fullName" required minlength="4">
                   </div>
                 <div class="mb-3">
                   <label for="email" class="form-label">Email</label>
-                  <input type="email" class="form-control" name="user-email" id="email">
+                  <input type="email" class="form-control" name="user-email" id="email" required>
                 </div>
                 <div class="mb-3">
                   <label for="phone" class="form-label">Whatsapp</label>
-                  <input type="tel" class="form-control" name="user-tel" id="phone">
+                  <input type="tel" class="form-control" name="user-tel" id="phone" required>
                 </div>
                 <div class="mb-3">
                     <label for="bornDate" class="form-label">Fecha de nacimiento</label>
-                    <input type="date" class="form-control" name="user-date" id="bornDate">
+                    <input type="date" class="form-control" name="user-date" id="bornDate" required>
                 </div>
                 <div class="mb-3">
                     <label for="urlImg" class="form-label">Imágen de perfil (URL)</label>
-                    <input type="url" class="form-control" name="user-img" id="urlImg">
+                    <input type="url" class="form-control" name="user-img" id="urlImg" required>
                 </div>
                 
                 <button type="submit" class="btn btn-primary" id="btn-submit">Registrar</button>
