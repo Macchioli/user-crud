@@ -135,12 +135,15 @@ function renderUsers(arrayUsers){
 
 /*===== TRANSFORMAR TIMESTAMP A DATE ======*/
 function transformTimestampToDate(dateTimeStamp){
+
     const dateFormat = new Intl.DateTimeFormat("es-AR", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric"
-    })
-
+        })
+    
+    const offset = new Date().getTimezoneOffset() * 60 * 1000;
+    dateTimeStamp += offset;
     const date = dateFormat.format(dateTimeStamp)
 
     return date
